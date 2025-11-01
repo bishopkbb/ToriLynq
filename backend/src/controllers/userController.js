@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
+const { notifyFollow } = require('../services/notificationService');
 
 /**
  * @desc    Get user profile by username
@@ -109,7 +110,8 @@ const followUser = async (req, res, next) => {
     userToFollow.followers.push(req.user._id);
     await userToFollow.save();
 
-    // TODO: Create notification (will implement later)
+    // Create notification
+    await notifyFollow(req.user._id, userToFollow._id);
 
     res.status(200).json({
       success: true,
