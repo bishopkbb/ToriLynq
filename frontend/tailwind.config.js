@@ -17,6 +17,11 @@ module.exports = {
           800: '#065f46',
           900: '#064e3b',
         },
+        dark: {
+          bg: '#1F2937',
+          card: '#374151',
+          hover: '#4B5563',
+        }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
