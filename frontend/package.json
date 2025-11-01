@@ -28,6 +28,12 @@
     ]
   },
   "dependencies": {
-    "react-router-dom": "^7.9.5"
+    "@reduxjs/toolkit": "^2.9.2",
+    "axios": "^1.13.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.552.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.9.5",
+    "react-scripts": "^5.0.1"
   }
 }

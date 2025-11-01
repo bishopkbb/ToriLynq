@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useSelector } from 'react-redux';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import Loader from './components/common/Loader';
+import HomePage from './pages/HomePage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -16,23 +16,24 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Home Page (Placeholder for now)
-const HomePage = () => {
-  const { user } = useSelector((state) => state.auth);
-  
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary-500 mb-4">
-          Welcome to ToriLynq, {user?.username}! 🎉
-        </h1>
-        <p className="text-gray-600">
-          Your feed will be here soon...
-        </p>
-      </div>
-    </div>
-  );
-};
+// Placeholder pages
+const ChatPage = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <h1 className="text-2xl font-bold text-gray-700">Chat (Coming Soon)</h1>
+  </div>
+);
+
+const VideosPage = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <h1 className="text-2xl font-bold text-gray-700">Videos (Coming Soon)</h1>
+  </div>
+);
+
+const ProfilePage = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <h1 className="text-2xl font-bold text-gray-700">Profile (Coming Soon)</h1>
+  </div>
+);
 
 function App() {
   return (
@@ -51,12 +52,36 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/videos"
+          element={
+            <ProtectedRoute>
+              <VideosPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Catch all - redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;
