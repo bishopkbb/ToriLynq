@@ -1,10 +1,12 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ResponsiveLayout from '../components/layout/ResponsiveLayout';
 import StoryCarousel from '../components/stories/StoryCarousel';
 import PostCard from '../components/posts/PostCard';
 import PostSkeleton from '../components/common/PostSkeleton';
+import CreatePostButton from '../components/posts/CreatePostButton';
+import CreatePostModal from '../components/posts/CreatePostModal';
 import Loader from '../components/common/Loader';
 import { fetchFeed, refreshFeed } from '../store/slices/postsSlice';
 
@@ -13,8 +15,9 @@ const HomePage = () => {
   const { posts, currentPage, hasMore, isLoading, isRefreshing } = useSelector(
     (state) => state.posts
   );
+  const [showCreatePost, setShowCreatePost] = useState(false);
 
-  // Mock posts as fallback when no real data
+  // Mock posts as fallback
   const mockPosts = [
     {
       _id: 'mock-1',
@@ -75,18 +78,27 @@ const HomePage = () => {
     }
   }, [dispatch, currentPage, hasMore, isLoading]);
 
-  // Refresh feed (pull to refresh)
+  // Refresh feed
   const handleRefresh = useCallback(() => {
     dispatch(refreshFeed({ limit: 10 }));
   }, [dispatch]);
 
-  // Use real posts if available, otherwise use mock data
+  // Use real posts if available, otherwise mock
   const displayPosts = posts.length > 0 ? posts : mockPosts;
 
   return (
     <ResponsiveLayout>
       {/* Story Carousel */}
       <StoryCarousel />
+
+      {/* Create Post Button */}
+      <CreatePostButton onClick={() => setShowCreatePost(true)} />
+
+      {/* Create Post Modal */}
+      <CreatePostModal
+        isOpen={showCreatePost}
+        onClose={() => setShowCreatePost(false)}
+      />
 
       {/* Refresh indicator */}
       {isRefreshing && (
@@ -95,7 +107,7 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* Posts Feed with Infinite Scroll */}
+      {/* Posts Feed */}
       <InfiniteScroll
         dataLength={displayPosts.length}
         next={loadMore}
@@ -109,7 +121,7 @@ const HomePage = () => {
           <div className="py-8 text-center">
             <p className="text-gray-500 font-medium mb-2">🎉 You're all caught up!</p>
             <p className="text-sm text-gray-400">
-              {posts.length === 0 
+              {posts.length === 0
                 ? 'Follow people to see their posts in your feed'
                 : 'No more posts to load'}
             </p>
@@ -142,7 +154,7 @@ const HomePage = () => {
         </div>
       </InfiniteScroll>
 
-      {/* Initial loading state */}
+      {/* Initial loading */}
       {isLoading && posts.length === 0 && (
         <div>
           <PostSkeleton />
@@ -151,19 +163,19 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* Empty state when no posts and no loading */}
+      {/* Empty state */}
       {!isLoading && posts.length === 0 && (
         <div className="py-16 text-center">
           <div className="text-6xl mb-4">📱</div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">Welcome to ToriLynq!</h3>
           <p className="text-gray-600 mb-6 max-w-sm mx-auto">
-            Start following people to see their stories and posts in your feed
+            Start creating posts or follow people to see their stories
           </p>
           <button
-            onClick={() => window.location.href = '/explore'}
+            onClick={() => setShowCreatePost(true)}
             className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-full transition-colors"
           >
-            Explore Users
+            Create Your First Post
           </button>
         </div>
       )}

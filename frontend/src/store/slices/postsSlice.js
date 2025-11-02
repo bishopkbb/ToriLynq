@@ -48,6 +48,18 @@ export const createPost = createAsyncThunk(
   }
 );
 
+export const deletePost = createAsyncThunk(
+  'posts/deletePost',
+  async (postId, { rejectWithValue }) => {
+    try {
+      await postService.deletePost(postId);
+      return postId;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const toggleLikePost = createAsyncThunk(
   'posts/toggleLike',
   async (postId, { rejectWithValue }) => {
@@ -90,7 +102,6 @@ const postsSlice = createSlice({
         state.isLoading = false;
         const newPosts = action.payload.data || [];
         
-        // Append new posts, avoid duplicates
         const existingIds = new Set(state.posts.map(p => p._id));
         const uniqueNewPosts = newPosts.filter(p => !existingIds.has(p._id));
         
@@ -122,6 +133,12 @@ const postsSlice = createSlice({
       // Create Post
       .addCase(createPost.fulfilled, (state, action) => {
         state.posts = [action.payload.data, ...state.posts];
+        state.totalPosts += 1;
+      })
+      // Delete Post
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.posts = state.posts.filter(post => post._id !== action.payload);
+        state.totalPosts -= 1;
       })
       // Toggle Like
       .addCase(toggleLikePost.fulfilled, (state, action) => {
