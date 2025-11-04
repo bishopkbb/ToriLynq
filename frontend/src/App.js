@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
+import ChatPage from './pages/ChatPage';
+import ConversationPage from './pages/ConversationPage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -17,12 +19,6 @@ const ProtectedRoute = ({ children }) => {
 };
 
 // Placeholder pages
-const ChatPage = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <h1 className="text-2xl font-bold text-gray-700">Chat (Coming Soon)</h1>
-  </div>
-);
-
 const VideosPage = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
     <h1 className="text-2xl font-bold text-gray-700">Videos (Coming Soon)</h1>
@@ -61,6 +57,14 @@ function App() {
           }
         />
         <Route
+          path="/chat/:conversationId"
+          element={
+            <ProtectedRoute>
+              <ConversationPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/videos"
           element={
             <ProtectedRoute>
@@ -77,11 +81,11 @@ function App() {
           }
         />
 
-        {/* Catch all - redirect to home */}
+        {/* Catch all */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
-};
+}
 
 export default App;
