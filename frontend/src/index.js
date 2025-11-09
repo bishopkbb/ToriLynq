@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { SocketProvider } from './contexts/SocketContext';
+import { ToastProvider } from './contexts/ToastContext';
 import './index.css';
 import App from './App';
 
@@ -11,7 +12,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <SocketProvider>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </SocketProvider>
     </Provider>
   </React.StrictMode>
